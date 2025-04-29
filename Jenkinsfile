@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'maven:3.9.6-eclipse-temurin-17'
+            image 'maven:3.8.1-adoptopenjdk-11'
             args '-v /root/.m2:/root/.m2'
         }
     }
@@ -17,8 +17,14 @@ pipeline {
             }
             post {
                 always {
-                    junit '**/target/surefire-reports/*.xml'
+                    junit '**/*.xml'
                 }
+            }
+        }
+        stage('Deliver') {
+            steps {
+                sh 'chmod +x ./jenkins/scripts/deliver.sh'
+                sh './jenkins/scripts/deliver.sh'
             }
         }
     }
